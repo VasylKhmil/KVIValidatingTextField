@@ -12,7 +12,9 @@
 @implementation UITextField (kvi_Validation)
 @dynamic validationRegex, minimalNumberOfCharacters, maximalNumberOfCharacters, isValid, invalidStateColor, validStateColor;
 
-- (void)setInvalidStateColor:(UIColor *)invalidStateColor {
+#pragma mark - Properties(Assotiation)
+
+- (void)setInvalidStateColor:(nullable UIColor *)invalidStateColor {
     objc_setAssociatedObject(self, @selector(invalidStateColor), invalidStateColor, OBJC_ASSOCIATION_RETAIN);
 }
 
@@ -20,7 +22,7 @@
     return objc_getAssociatedObject(self, @selector(invalidStateColor));
 }
 
-- (void)setValidStateColor:(UIColor *)invalidStateColor {
+- (void)setValidStateColor:(nullable UIColor *)invalidStateColor {
     objc_setAssociatedObject(self, @selector(validStateColor), invalidStateColor, OBJC_ASSOCIATION_RETAIN);
 }
 
@@ -46,7 +48,7 @@
     return maximalNumber == nil ? INT_MAX : maximalNumber.integerValue;
 }
 
-- (void)setValidationRegex:(NSString *)validationRegex {
+- (void)setValidationRegex:(nullable NSString *)validationRegex {
     objc_setAssociatedObject(self, @selector(validationRegex), validationRegex, OBJC_ASSOCIATION_RETAIN);
 }
 
@@ -54,10 +56,7 @@
     return objc_getAssociatedObject(self, @selector(validationRegex));
 }
 
-
-
-
-
+#pragma mark - Properties(Validation)
 
 - (BOOL)isValid {
     
@@ -86,19 +85,32 @@
     return isValid;
 }
 
-+ (void)checkAllVisibleFieldsIfIsValidWithMatchedFields:(NSArray *__autoreleasing *)matchedFields
-                                          faildedFields:(NSArray *__autoreleasing *)failedFields
++ (void)checkAllVisibleFieldsIfIsValidWithMatchedFields:(NSArray *__autoreleasing  _Nullable *)matchedFields
+                                          faildedFields:(NSArray *__autoreleasing  _Nullable *)failedFields
                                            updateStates:(BOOL)updateStates {
     
     UIView *rootView = [UIApplication sharedApplication].delegate.window;
 
+    [self checkAFieldsIfIsValidOnView:rootView
+                    withMatchedFields:matchedFields
+                        faildedFields:failedFields
+                         updateStates:updateStates];
+    
+}
+
++ (void)checkAFieldsIfIsValidOnView:(UIView *)view
+                  withMatchedFields:(NSArray *__autoreleasing  _Nullable *)matchedFields
+                      faildedFields:(NSArray *__autoreleasing  _Nullable *)failedFields
+                       updateStates:(BOOL)updateStates {
+    
     NSMutableArray *matched = [NSMutableArray new];
     NSMutableArray *failed = [NSMutableArray new];
     
-    [self enumerateAllTextFieldFromView:rootView
-                            withhandler:^(UITextField *textField) {
+    [self enumerateAllTextFieldFromView:view
+                            withHandler:^(UITextField *textField) {
                                 if (!textField.hidden) {
                                     BOOL isValid = textField.isValid;
+                                    
                                     if (isValid) {
                                         [matched addObject:textField];
                                         
@@ -115,22 +127,22 @@
     if (matchedFields != nil) {
         *matchedFields = [[NSArray alloc] initWithArray:matched];
     }
+    
     if (failedFields != nil) {
         *failedFields = [[NSArray alloc] initWithArray:failed];
     }
-    
 }
 
 #pragma mark - Private
 
-+ (void)enumerateAllTextFieldFromView:(UIView *)startView withhandler:(void (^)(UITextField *textField))handler {
++ (void)enumerateAllTextFieldFromView:(UIView *)startView withHandler:(void (^)(UITextField *textField))handler {
     for (UIView *subview in startView.subviews) {
         if ([subview isKindOfClass:[UITextField class]]) {
             handler((UITextField *)subview);
             
         } else {
             [self enumerateAllTextFieldFromView:subview
-                                    withhandler:handler];
+                                    withHandler:handler];
         }
     }
 }

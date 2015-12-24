@@ -10,11 +10,11 @@
 
 @interface UITextField (kvi_Validation)
 
-@property (nonatomic, strong) IBInspectable NSString *validationRegex;
+@property (nonatomic, strong, nullable) IBInspectable NSString *validationRegex;
 
-@property (nonatomic, strong) IBInspectable UIColor *invalidStateColor;
+@property (nonatomic, strong, nullable) IBInspectable UIColor *invalidStateColor;
 
-@property (nonatomic, strong) IBInspectable UIColor *validStateColor;
+@property (nonatomic, strong, nullable) IBInspectable UIColor *validStateColor;
 
 @property (nonatomic) IBInspectable NSUInteger minimalNumberOfCharacters;
 
@@ -26,8 +26,14 @@
 @property (nonatomic, readonly) BOOL isValid;
 
 - (BOOL)checkIfIsValidAndUpdateValidationState;
-+ (void)checkAllVisibleFieldsIfIsValidWithMatchedFields:(NSArray **)matchedFields
-                                          faildedFields:(NSArray **)failedFields
+
++ (void)checkAllVisibleFieldsIfIsValidWithMatchedFields:(NSArray *__autoreleasing  _Nullable *)matchedFields
+                                          faildedFields:(NSArray *__autoreleasing  _Nullable *)failedFields
                                            updateStates:(BOOL)updateStates;
+
++ (void)checkAFieldsIfIsValidOnView:(nonnull UIView *)view
+                  withMatchedFields:(NSArray *__autoreleasing  _Nullable *)matchedFields
+                      faildedFields:(NSArray *__autoreleasing  _Nullable *)failedFields
+                       updateStates:(BOOL)updateStates;
 
 @end
