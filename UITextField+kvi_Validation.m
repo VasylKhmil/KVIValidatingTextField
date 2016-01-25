@@ -91,14 +91,14 @@
     
     UIView *rootView = [UIApplication sharedApplication].delegate.window;
 
-    [self checkAFieldsIfIsValidOnView:rootView
+    [self checkAllFieldsIfIsValidOnView:rootView
                     withMatchedFields:matchedFields
                         faildedFields:failedFields
                          updateStates:updateStates];
     
 }
 
-+ (void)checkAFieldsIfIsValidOnView:(UIView *)view
++ (void)checkAllFieldsIfIsValidOnView:(UIView *)view
                   withMatchedFields:(NSArray *__autoreleasing  _Nullable *)matchedFields
                       faildedFields:(NSArray *__autoreleasing  _Nullable *)failedFields
                        updateStates:(BOOL)updateStates {

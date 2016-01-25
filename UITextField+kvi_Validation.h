@@ -31,7 +31,7 @@
                                           faildedFields:(NSArray *__autoreleasing  _Nullable *)failedFields
                                            updateStates:(BOOL)updateStates;
 
-+ (void)checkAFieldsIfIsValidOnView:(nonnull UIView *)view
++ (void)checkAllFieldsIfIsValidOnView:(nonnull UIView *)view
                   withMatchedFields:(NSArray *__autoreleasing  _Nullable *)matchedFields
                       faildedFields:(NSArray *__autoreleasing  _Nullable *)failedFields
                        updateStates:(BOOL)updateStates;
