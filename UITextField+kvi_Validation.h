@@ -27,13 +27,13 @@
 
 - (BOOL)checkIfIsValidAndUpdateValidationState;
 
-+ (void)checkAllVisibleFieldsIfIsValidWithMatchedFields:(NSArray *__autoreleasing  _Nullable *)matchedFields
-                                          faildedFields:(NSArray *__autoreleasing  _Nullable *)failedFields
++ (void)checkAllVisibleFieldsIfIsValidWithMatchedFields:(NSArray *__autoreleasing  _Nullable * _Nullable)matchedFields
+                                          faildedFields:(NSArray *__autoreleasing  _Nullable * _Nullable)failedFields
                                            updateStates:(BOOL)updateStates;
 
 + (void)checkAllFieldsIfIsValidOnView:(nonnull UIView *)view
-                  withMatchedFields:(NSArray *__autoreleasing  _Nullable *)matchedFields
-                      faildedFields:(NSArray *__autoreleasing  _Nullable *)failedFields
-                       updateStates:(BOOL)updateStates;
+                    withMatchedFields:(NSArray *__autoreleasing  _Nullable * _Nullable)matchedFields
+                        faildedFields:(NSArray *__autoreleasing  _Nullable * _Nullable)failedFields
+                         updateStates:(BOOL)updateStates;
 
 @end
