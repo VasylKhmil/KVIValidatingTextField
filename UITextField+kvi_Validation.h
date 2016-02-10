@@ -20,8 +20,19 @@
 
 @property (nonatomic) IBInspectable NSUInteger maximalNumberOfCharacters;
 
+@property (nonatomic) IBInspectable BOOL showErrorMessage;
 
+@property (nonatomic) IBInspectable BOOL showErrorImage;
 
+@property (nonatomic) CGFloat borderWidth;
+
+@property (nonatomic, strong, nullable) IBInspectable NSString *errorMessage;
+
+@property (nonatomic, strong, nullable) IBOutlet UILabel *errorMessageLabel;
+
+@property (nonatomic, strong, nullable) IBOutlet UIImageView *errorImageView;
+
+@property (nonatomic, strong, nullable) IBOutlet UITextField *equalContentTextField;
 
 @property (nonatomic, readonly) BOOL isValid;
 
@@ -32,8 +43,10 @@
                                            updateStates:(BOOL)updateStates;
 
 + (void)checkAllFieldsIfIsValidOnView:(nonnull UIView *)view
-                    withMatchedFields:(NSArray *__autoreleasing  _Nullable * _Nullable)matchedFields
-                        faildedFields:(NSArray *__autoreleasing  _Nullable * _Nullable)failedFields
-                         updateStates:(BOOL)updateStates;
+                  withMatchedFields:(NSArray *__autoreleasing  _Nullable * _Nullable)matchedFields
+                      faildedFields:(NSArray *__autoreleasing  _Nullable * _Nullable)failedFields
+                       updateStates:(BOOL)updateStates;
+
+- (void)updateState:(BOOL)isValid;
 
 @end

@@ -56,13 +56,81 @@
     return objc_getAssociatedObject(self, @selector(validationRegex));
 }
 
+- (void)setShowErrorMessage:(BOOL)showErrorMessage {
+    objc_setAssociatedObject(self, @selector(showErrorMessage), @(showErrorMessage), OBJC_ASSOCIATION_RETAIN);
+}
+
+- (BOOL)showErrorMessage {
+    NSNumber *value = objc_getAssociatedObject(self, @selector(showErrorMessage));
+    
+    return  value.boolValue;
+}
+
+- (void)setErrorMessage:(NSString *)errorMessage {
+    objc_setAssociatedObject(self, @selector(errorMessage), errorMessage, OBJC_ASSOCIATION_RETAIN);
+}
+
+- (NSString *)errorMessage {
+    return  objc_getAssociatedObject(self, @selector(errorMessage));
+}
+
+- (void)setErrorMessageLabel:(UILabel *)errorMessageLabel {
+    objc_setAssociatedObject(self, @selector(errorMessageLabel), errorMessageLabel, OBJC_ASSOCIATION_RETAIN);
+}
+
+- (UILabel *)errorMessageLabel {
+    return objc_getAssociatedObject(self, @selector(errorMessageLabel));
+}
+
+- (void)setEqualContentTextField:(UITextField *)equalContentTextField {
+    objc_setAssociatedObject(self, @selector(equalContentTextField), equalContentTextField, OBJC_ASSOCIATION_RETAIN);
+}
+
+- (UITextField *)equalContentTextField {
+    return objc_getAssociatedObject(self, @selector(equalContentTextField));
+}
+
+- (void)setBorderWidth:(CGFloat)borderWidth {
+    objc_setAssociatedObject(self, @selector(borderWidth), @(borderWidth), OBJC_ASSOCIATION_RETAIN);
+}
+
+- (CGFloat)borderWidth {
+    NSNumber *value = objc_getAssociatedObject(self, @selector(borderWidth));
+    
+    return value == nil ? 1 : value.floatValue;
+}
+
+- (void)setShowErrorImage:(BOOL)showErrorImage {
+    objc_setAssociatedObject(self, @selector(showErrorImage), @(showErrorImage), OBJC_ASSOCIATION_RETAIN);
+}
+
+- (BOOL)showErrorImage {
+    NSNumber *value = objc_getAssociatedObject(self, @selector(showErrorImage));
+    
+    return value.boolValue;
+}
+
+- (void)setErrorImageView:(UIImageView *)errorImageView {
+    objc_setAssociatedObject(self, @selector(errorImageView), errorImageView, OBJC_ASSOCIATION_RETAIN);
+}
+
+- (UIImageView *)errorImageView {
+    return  objc_getAssociatedObject(self, @selector(errorImageView));
+}
+
 #pragma mark - Properties(Validation)
 
 - (BOOL)isValid {
     
-    return self.matchRegex &&
-        (self.text.length <= self.maximalNumberOfCharacters) &&
-        (self.text.length >= self.minimalNumberOfCharacters);
+    BOOL result = self.matchRegex;
+    result = result && (self.text.length <= self.maximalNumberOfCharacters);
+    result = result && (self.text.length >= self.minimalNumberOfCharacters);
+    
+    if (self.equalContentTextField != nil) {
+        result = result && ([self.text isEqualToString:self.equalContentTextField.text]);
+    }
+    
+    return result;
 }
 
 - (BOOL)matchRegex {
@@ -83,6 +151,14 @@
     [self updateState:isValid];
     
     return isValid;
+}
+
+- (void)updateState:(BOOL)isValid {
+    [self updateBorder:isValid];
+    
+    [self updateErrorMessage:isValid];
+    
+    [self updateErrorImage:isValid];
 }
 
 + (void)checkAllVisibleFieldsIfIsValidWithMatchedFields:(NSArray *__autoreleasing  _Nullable *)matchedFields
@@ -147,15 +223,29 @@
     }
 }
 
-- (void)updateState:(BOOL)isValid {
+- (void)updateBorder:(BOOL)isValid {
     UIColor *validColor = self.validStateColor;
     UIColor *invalidColor = self.invalidStateColor;
     
     validColor = (validColor == nil) ? [UIColor clearColor] : validColor;
     invalidColor = (invalidColor == nil) ? [UIColor redColor] : invalidColor;
     
-    self.layer.borderWidth = isValid ? 0 : 2;
+    self.layer.borderWidth = isValid ? 0 : self.borderWidth;
     self.layer.borderColor = isValid ? validColor.CGColor : invalidColor.CGColor;
+}
+
+- (void)updateErrorMessage:(BOOL)isValid {
+    if (self.showErrorMessage && !isValid) {
+        
+        self.errorMessageLabel.text = self.errorMessage;
+        
+    } else {
+        self.errorMessageLabel.text = @"";
+    }
+}
+
+- (void)updateErrorImage:(BOOL)isValid {
+    self.errorImageView.hidden = !self.showErrorImage || isValid;
 }
 
 @end
