@@ -75,6 +75,7 @@
 }
 
 - (void)setErrorMessageLabel:(UILabel *)errorMessageLabel {
+    errorMessageLabel.hidden = TRUE;
     objc_setAssociatedObject(self, @selector(errorMessageLabel), errorMessageLabel, OBJC_ASSOCIATION_RETAIN);
 }
 
@@ -92,6 +93,8 @@
 
 - (void)setBorderWidth:(CGFloat)borderWidth {
     objc_setAssociatedObject(self, @selector(borderWidth), @(borderWidth), OBJC_ASSOCIATION_RETAIN);
+    
+    self.layer.borderWidth = borderWidth;
 }
 
 - (CGFloat)borderWidth {
@@ -111,6 +114,7 @@
 }
 
 - (void)setErrorImageView:(UIImageView *)errorImageView {
+    errorImageView.hidden = TRUE;
     objc_setAssociatedObject(self, @selector(errorImageView), errorImageView, OBJC_ASSOCIATION_RETAIN);
 }
 
@@ -235,6 +239,8 @@
 }
 
 - (void)updateErrorMessage:(BOOL)isValid {
+    self.errorMessageLabel.hidden = !self.showErrorMessage || isValid;
+    
     if (self.showErrorMessage && !isValid) {
         
         self.errorMessageLabel.text = self.errorMessage;
