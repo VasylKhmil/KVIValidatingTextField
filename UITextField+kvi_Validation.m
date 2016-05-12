@@ -126,7 +126,7 @@
 
 - (BOOL)isValid {
     
-    BOOL result = self.matchRegex;
+    BOOL result = self.validationRegex.length == 0 || self.matchRegex;
     result = result && (self.text.length <= self.maximalNumberOfCharacters);
     result = result && (self.text.length >= self.minimalNumberOfCharacters);
     
@@ -160,7 +160,7 @@
 - (void)updateState:(BOOL)isValid {
     [self updateBorder:isValid];
     
-    [self updateErrorMessage:isValid];
+    [self updateErrorMessage:isValid withErrorMessage:self.errorMessage];
     
     [self updateErrorImage:isValid];
 }
@@ -213,6 +213,14 @@
     }
 }
 
+- (void)updateState:(BOOL)isValid withErrorMessage:(NSString*)errorMessage {
+    [self updateBorder:isValid];
+    
+    [self updateErrorMessage:isValid withErrorMessage:errorMessage];
+    
+    [self updateErrorImage:isValid];
+}
+
 #pragma mark - Private
 
 + (void)enumerateAllTextFieldFromView:(UIView *)startView withHandler:(void (^)(UITextField *textField))handler {
@@ -233,17 +241,18 @@
     
     validColor = (validColor == nil) ? [UIColor clearColor] : validColor;
     invalidColor = (invalidColor == nil) ? [UIColor redColor] : invalidColor;
-    
-    self.layer.borderWidth = isValid ? 0 : self.borderWidth;
+
+#warning OK: commented line to fix issue with border color
+//    self.layer.borderWidth = isValid ? 0 : self.borderWidth;
     self.layer.borderColor = isValid ? validColor.CGColor : invalidColor.CGColor;
 }
 
-- (void)updateErrorMessage:(BOOL)isValid {
+- (void)updateErrorMessage:(BOOL)isValid withErrorMessage:(NSString *)errorMessage {
     self.errorMessageLabel.hidden = !self.showErrorMessage || isValid;
     
     if (self.showErrorMessage && !isValid) {
         
-        self.errorMessageLabel.text = self.errorMessage;
+        self.errorMessageLabel.text = errorMessage;
         
     } else {
         self.errorMessageLabel.text = @"";

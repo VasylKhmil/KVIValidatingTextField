@@ -49,4 +49,6 @@
 
 - (void)updateState:(BOOL)isValid;
 
+- (void)updateState:(BOOL)isValid withErrorMessage:(NSString*)errorMessage;
+
 @end
